@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Профиль пользователя</h2>
+<ul>
+    <li>Имя пользователя: {{ user.username }}</li>
+    <li>Email: {{ user.email }}</li>
+    <li>
+        Telegram: 
+        {% if user.telegram_id %}
+            Привязан (ID: {{ user.telegram_id }})
+        {% else %}
+            Не привязан
+            <form method="post" action="{% url 'generate_telegram_link' %}">
+                {% csrf_token %}
+                <button type="submit">Привязать Telegram</button>
+            </form>
+            {% if telegram_link %}
+                <p>Ссылка для привязки: <a href="{{ telegram_link }}" target="_blank">{{ telegram_link }}</a></p>
+                {% if telegram_qr %}
+                    <img src="data:image/png;base64,{{ telegram_qr }}" alt="QR для Telegram">
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </li>
+</ul>
+<a href="{% url 'logout' %}">Выйти</a>
+{% endblock %} 
