@@ -1,27 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Профиль пользователя</h2>
-<ul>
-    <li>Имя пользователя: {{ user.username }}</li>
-    <li>Email: {{ user.email }}</li>
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Профиль пользователя</h2>
+<div class="bg-white rounded-xl shadow-md p-6 max-w-md mx-auto">
+<ul class="mb-4">
+    <li><b>Имя пользователя:</b> {{ user.username }}</li>
+    <li><b>Email:</b> {{ user.email }}</li>
     <li>
-        Telegram: 
+        <b>Telegram:</b>
         {% if user.telegram_id %}
             Привязан (ID: {{ user.telegram_id }})
         {% else %}
             Не привязан
-            <form method="post" action="{% url 'generate_telegram_link' %}">
+            <form method="post" action="{% url 'generate_telegram_link' %}" class="inline-block mt-2">
                 {% csrf_token %}
-                <button type="submit">Привязать Telegram</button>
+                <button type="submit" class="px-4 py-2 bg-blue-400/80 text-white rounded shadow hover:bg-blue-500 transition">Привязать Telegram</button>
             </form>
             {% if telegram_link %}
-                <p>Ссылка для привязки: <a href="{{ telegram_link }}" target="_blank">{{ telegram_link }}</a></p>
+                <p class="mt-2">Ссылка для привязки: <a href="{{ telegram_link }}" target="_blank" class="text-blue-500 underline">{{ telegram_link }}</a></p>
                 {% if telegram_qr %}
-                    <img src="data:image/png;base64,{{ telegram_qr }}" alt="QR для Telegram">
+                    <img src="data:image/png;base64,{{ telegram_qr }}" alt="QR для Telegram" class="mt-2 rounded shadow"/>
                 {% endif %}
             {% endif %}
         {% endif %}
     </li>
 </ul>
-<a href="{% url 'logout' %}">Выйти</a>
+<a href="{% url 'logout' %}" class="px-4 py-2 bg-gray-200 rounded shadow hover:bg-gray-300 transition">Выйти</a>
+</div>
 {% endblock %} 

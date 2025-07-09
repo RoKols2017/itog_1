@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Мои карточки</h2>
+<form method="get" class="mb-4 flex gap-2 items-center">
+    <label for="level" class="text-gray-700">Уровень:</label>
+    <select name="level" id="level" class="px-2 py-1 rounded border focus:outline-blue-400">
+        <option value="">Все</option>
+        <option value="beginner" {% if request.GET.level == 'beginner' %}selected{% endif %}>Начальный</option>
+        <option value="intermediate" {% if request.GET.level == 'intermediate' %}selected{% endif %}>Средний</option>
+        <option value="advanced" {% if request.GET.level == 'advanced' %}selected{% endif %}>Продвинутый</option>
+    </select>
+    <button type="submit" class="px-3 py-1 bg-blue-400/80 text-white rounded shadow hover:bg-blue-500 transition">Фильтровать</button>
+</form>
+<div class="flex gap-2 mb-4">
+  <a href="{% url 'card_add' %}" class="px-4 py-2 bg-green-400/80 text-white rounded shadow hover:bg-green-500 transition">Добавить карточку</a>
+  <a href="{% url 'card_import' %}" class="px-4 py-2 bg-blue-100 text-blue-800 rounded shadow hover:bg-blue-200 transition">Импорт из CSV</a>
+</div>
+<div class="flex flex-col gap-3">
+    {% for card in cards %}
+    <div class="bg-white rounded-xl shadow-md p-4 flex items-center justify-between gap-2 hover:shadow-lg transition">
+        <div>
+            <div class="font-semibold text-lg text-gray-800">{{ card.word }}</div>
+            <div class="text-gray-500">{{ card.translation }}</div>
+            <div class="text-xs text-gray-400">{{ card.get_level_display }}</div>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'card_edit' card.pk %}" class="text-blue-400 hover:text-blue-600 transition" title="Редактировать">✏️</a>
+            <a href="{% url 'card_delete' card.pk %}" class="text-red-400 hover:text-red-600 transition" title="Удалить">🗑️</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="p-2 text-center text-gray-400">Нет карточек</div>
+    {% endfor %}
+</div>
+{% endblock %} 

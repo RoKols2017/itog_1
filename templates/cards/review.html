@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+  <div class="bg-white rounded-xl shadow-md p-6 w-full max-w-md flex flex-col items-center gap-4">
+    <h2 class="text-2xl font-bold text-blue-700 text-center">Повторение карточки</h2>
+    <div class="w-full text-center">
+      <div class="text-lg font-semibold text-gray-800 mb-2">{{ card.word }}</div>
+      <div class="text-gray-500 mb-2">{{ card.translation }}</div>
+      {% if card.example %}
+        <div class="text-sm text-gray-400 mb-2">Пример: {{ card.example }}</div>
+      {% endif %}
+      {% if card.comment %}
+        <div class="text-xs text-gray-300 mb-2">Комментарий: {{ card.comment }}</div>
+      {% endif %}
+      <div class="text-xs text-gray-400 mb-2">Уровень: {{ card.get_level_display }}</div>
+    </div>
+    <form method="post" class="flex flex-col gap-2 w-full items-center">
+      {% csrf_token %}
+      <div class="flex flex-wrap gap-2 justify-center">
+        {% for i in "012345" %}
+          <button name="quality" value="{{ i }}" type="submit" class="px-4 py-2 rounded shadow bg-blue-100 hover:bg-blue-300 text-blue-800 font-bold transition">{{ i }}</button>
+        {% endfor %}
+      </div>
+      <div class="text-xs text-gray-400 mt-2">0 — не знал, 5 — идеально</div>
+    </form>
+  </div>
+</div>
+{% endblock %} 

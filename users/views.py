@@ -1,3 +1,6 @@
+"""
+Views приложения users: регистрация, вход, выход, профиль, генерация magic-ссылки для Telegram.
+"""
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -17,6 +20,10 @@ except ImportError:
 # Create your views here.
 
 class RegisterView(View):
+    """
+    Регистрация нового пользователя.
+    GET — форма, POST — обработка и создание пользователя.
+    """
     def get(self, request):
         form = CustomUserCreationForm()
         return render(request, 'users/register.html', {'form': form})
@@ -30,6 +37,10 @@ class RegisterView(View):
         return render(request, 'users/register.html', {'form': form})
 
 class LoginView(View):
+    """
+    Вход пользователя.
+    GET — форма, POST — обработка и аутентификация.
+    """
     def get(self, request):
         form = CustomAuthenticationForm()
         return render(request, 'users/login.html', {'form': form})
@@ -43,14 +54,24 @@ class LoginView(View):
         return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):
+    """
+    Выход пользователя (logout).
+    """
     logout(request)
     return redirect('login')
 
 @login_required
 def profile_view(request):
+    """
+    Профиль пользователя (только для авторизованных).
+    """
     return render(request, 'users/profile.html', {'user': request.user})
 
 def generate_telegram_link(request):
+    """
+    Генерация magic-ссылки и QR-кода для привязки Telegram.
+    POST — генерирует токен, magic-ссылку и QR, возвращает в профиль.
+    """
     if request.method == 'POST':
         user = request.user
         # Генерируем уникальный токен
