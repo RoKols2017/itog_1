@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'users',
     'cards',
     'core',
+    'bot_api',
 ]
 
 # --- Middleware ---

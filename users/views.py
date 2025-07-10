@@ -33,7 +33,7 @@ class RegisterView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('profile')
+            return redirect('index')
         return render(request, 'users/register.html', {'form': form})
 
 class LoginView(View):
@@ -50,7 +50,7 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('profile')
+            return redirect('index')
         return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):

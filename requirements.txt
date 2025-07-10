@@ -1,3 +1,5 @@
 Django>=5.2.4
 qrcode
-Pillow 
+Pillow
+requests
+python-dotenv 

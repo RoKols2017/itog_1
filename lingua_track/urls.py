@@ -10,5 +10,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Django admin
     path('users/', include('users.urls')),  # Пользовательские маршруты
     path('cards/', include('cards.urls')),  # Карточки
+    path('api/', include('bot_api.urls')),  # API для Telegram-бота
     path('', index, name='index'),  # Главная страница
 ]

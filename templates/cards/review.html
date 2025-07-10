@@ -4,7 +4,12 @@
   <div class="bg-white rounded-xl shadow-md p-6 w-full max-w-md flex flex-col items-center gap-4">
     <h2 class="text-2xl font-bold text-blue-700 text-center">Повторение карточки</h2>
     <div class="w-full text-center">
-      <div class="text-lg font-semibold text-gray-800 mb-2">{{ card.word }}</div>
+      <div class="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2 justify-center">
+        {{ card.word }}
+        <button onclick="playTTS({{ card.id }})" title="Озвучить" class="text-blue-400 hover:text-blue-600 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6h6v13m-3-3a4 4 0 100-8 4 4 0 000 8z" /></svg>
+        </button>
+      </div>
       <div class="text-gray-500 mb-2">{{ card.translation }}</div>
       {% if card.example %}
         <div class="text-sm text-gray-400 mb-2">Пример: {{ card.example }}</div>
@@ -25,4 +30,11 @@
     </form>
   </div>
 </div>
+<script>
+function playTTS(cardId) {
+    const audio = new Audio();
+    audio.src = `/cards/${cardId}/tts/?field=word`;
+    audio.play();
+}
+</script>
 {% endblock %} 

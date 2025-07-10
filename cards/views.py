@@ -15,8 +15,9 @@ from io import TextIOWrapper
 from django.contrib import messages
 from .sm2 import update_schedule
 from datetime import date
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse, JsonResponse, Http404
 from django.urls import reverse
+from .speechkit import synthesize_speech
 
 @method_decorator(login_required, name='dispatch')
 class CardListView(ListView):
@@ -144,3 +145,22 @@ def import_cards(request):
     else:
         form = CardImportForm()
     return render(request, 'cards/import.html', {'form': form})
+
+@login_required
+def tts_card(request, pk):
+    """
+    Возвращает озвучку слова (или примера) карточки через Yandex SpeechKit (с кешем).
+    Только для своих карточек. GET-параметры: field=word|example|translation, lang, voice.
+    """
+    card = get_object_or_404(Card, pk=pk, user=request.user)
+    field = request.GET.get('field', 'word')
+    text = getattr(card, field, None)
+    if not text:
+        return JsonResponse({'error': 'Нет текста для озвучки'}, status=400)
+    lang = request.GET.get('lang', 'en-US')
+    voice = request.GET.get('voice', 'alena')
+    try:
+        audio_path = synthesize_speech(text, lang=lang, voice=voice)
+        return FileResponse(open(audio_path, 'rb'), content_type='audio/ogg')
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

@@ -19,7 +19,12 @@
     {% for card in cards %}
     <div class="bg-white rounded-xl shadow-md p-4 flex items-center justify-between gap-2 hover:shadow-lg transition">
         <div>
-            <div class="font-semibold text-lg text-gray-800">{{ card.word }}</div>
+            <div class="font-semibold text-lg text-gray-800 flex items-center gap-2">
+                {{ card.word }}
+                <button onclick="playTTS({{ card.id }})" title="Озвучить" class="text-blue-400 hover:text-blue-600 focus:outline-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6h6v13m-3-3a4 4 0 100-8 4 4 0 000 8z" /></svg>
+                </button>
+            </div>
             <div class="text-gray-500">{{ card.translation }}</div>
             <div class="text-xs text-gray-400">{{ card.get_level_display }}</div>
         </div>
@@ -32,4 +37,11 @@
     <div class="p-2 text-center text-gray-400">Нет карточек</div>
     {% endfor %}
 </div>
+<script>
+function playTTS(cardId) {
+    const audio = new Audio();
+    audio.src = `/cards/${cardId}/tts/?field=word`;
+    audio.play();
+}
+</script>
 {% endblock %} 
